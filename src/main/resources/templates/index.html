@@ -5,38 +5,92 @@
 <head>
     <title>Maps</title>
     <link rel="stylesheet" type="text/css" href="/custom.css"/>
-<!--    Placed Style below in custom.css and add the link above to reference them-->
-<!--    <style>-->
-<!--      #map {-->
-<!--        height: 100%;-->
-<!--      }-->
-<!--      html, body {-->
-<!--        height: 100%;-->
-<!--        margin: 0;-->
-<!--        padding: 0;-->
-<!--      }-->
-<!--    </style>-->
+<!--
+    Placed Style below in custom.css and add the link above to reference them
+    <style>
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+-->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
+    <!--We want the user to be able to type in a city/state and have the map update to that location. Let's make this possible by adding a form to our HTML.-->
+    <div class="container bg-light justify-content-center">
+        <div class="row">
+            <div class="span6" style="float: none; margin: 0 auto;">
+
+                <br/>
+                <h1 class="text-center">View a Location</h1>
+                <form th:action="@{/home}" th:object="${location}" method="post" autocomplete="off" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" th:field="*{city}" placeholder="City" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" th:field="*{state}" placeholder="State" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-md btn-primary btn-block" name="Submit" value="Submit" type="Submit">Update Map</button>
+                    </div>
+                </form>
+                <br/>
+
+            </div>
+        </div>
+    </div>
+
     <div id="map"></div>
-    <script src="/custom.js"></script>
-<!--    Moved this method to custom.js and added above script to reference it-->
-<!--    <script>-->
-<!--          var map;-->
-<!--          function initMap() {-->
-<!--            map = new google.maps.Map(document.getElementById('map'), {-->
-<!--              center: {lat: 39.9612, lng: -82.9988},-->
-<!--              zoom: 10-->
-<!--            });-->
-<!--          }-->
-<!--        </script>-->
-<!--    <script src="https://maps.googleapis.com/maps/api/js?key=[API_KEY_HERE]&callback=initMap"-->
-<!--            async defer></script>-->
-<!--    use below script instead of above ??-->
-    <script th:src="@{${'https://maps.googleapis.com/maps/api/js?key=' +
-@environment.getProperty('api_key') + '&callback=initMap'}}" async defer>
+
+<!--    add thi inline script lines because of the new controller methods-->
+<!--    getDefaultMap and getMapForLocation-->
+    <script th:inline="javascript">
+   /*<![CDATA[*/
+
+    let coords = {
+        lat: parseFloat(/*[[${location.lat}]]*/) || 32.5252,
+        lng: parseFloat(/*[[${location.lng}]]*/) || -93.7502
+            };
+    let city = /*[[${location.city}]]*/;
+    let state = /*[[${location.state}]]*/;
+
+
+    /*]]>*/
+
     </script>
+    <script th:inline="javascript" src="/custom.js"></script>
+
+
+
+<!--    <script src="/custom.js"></script>-->
+<!--   Moved this script method to custom.js and added above script to reference it
+    <script>
+          var map;
+          function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+              center: {lat: 39.9612, lng: -82.9988},
+              zoom: 10
+            });
+          }
+        </script>
+-->
+<!--
+    <script src="https://maps.googleapis.com/maps/api/js?key=[API_KEY_HERE]&callback=initMap"
+            async defer></script>
+
+    replace above script with this one below
+-->
+    <script th:src="@{${'https://maps.googleapis.com/maps/api/js?key=' +
+        @environment.getProperty('api_key') + '&callback=initMap'}}" async defer>
+    </script>
+
 </body>
 
 </html>

@@ -15,7 +15,7 @@ Geocoding API to get the coordinates for a particular City/State.
 @Service
 public class MapServiceImpl implements MapService {
 
-    @Value("$api_key")
+    @Value("${api_key}")
     private String apiKey;
 
     @Override
